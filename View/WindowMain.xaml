@@ -1,0 +1,110 @@
+﻿<Window x:Class="PipePressureDrop.View.WindowMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:PipePressureDrop.ViewModel"
+        mc:Ignorable="d" Height="613" Width="450" WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterScreen"  Title="PipePressureDrop  Ver1.4.2" 
+        FontSize="12" ResizeMode="NoResize"
+        Topmost="{Binding ElementName=mnuOnTop, Path=IsChecked, Mode=OneWay}"
+        FocusManager.FocusedElement="{Binding ElementName=txtMassFlow}">
+
+    <Window.DataContext>
+        <vm:ViewModelMain/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <!--Basic TextBox Stytle-->
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="{StaticResource {x:Static SystemColors.ControlDarkBrushKey}}" />
+            <Setter Property="Padding" Value="2"/>
+            <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
+        </Style>
+        <!--Extended TextBox Stytle-->
+        <Style x:Key="ExtendedTextStytle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}" >
+            <Setter Property="Background" Value="#eee"/>
+        </Style>
+    </Window.Resources>
+    
+    <Window.InputBindings>
+        <KeyBinding Gesture="ESC" 
+                    Command="{Binding ClearText}" 
+                    CommandParameter="{Binding RelativeSource={x:Static RelativeSource.Self}}"
+                    />
+    </Window.InputBindings>
+
+    <Border Padding="5">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                <!--流体参数-->
+                <TextBlock Text="Fluid Parms" FontWeight="Bold" Foreground="Red" />
+                <TextBlock Text="MassFlow(kg/h)" Margin="0 8 0 1"/>
+                <TextBox x:Name="txtMassFlow" Text="{Binding Pipe.MassFlow, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
+                <TextBlock Text="Density(kg/m³)"  Margin="0 5 0 1"/>
+                <TextBox Text="{Binding Pipe.Density, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource, FallbackValue=1000}" />
+                <TextBlock Text="Viscosity(mPa.s)" Margin="0 5 0 1"/>
+                <TextBox Text="{Binding Pipe.Viscosity, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource, FallbackValue=1}" />
+                <!--管道参数-->
+                <TextBlock Text="Pipeline Parms" FontWeight="Bold" Foreground="Red" Margin="0 10 0 0" />
+                <TextBlock Text="InnerDiameter(mm)"  Margin="0 8 0 0"/>
+                <TextBox Text="{Binding Pipe.InnerDiameter, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+                <TextBlock Text="PipeLength(m)" Margin="0 5 0 0"/>
+                <TextBox Text="{Binding Pipe.PipeLength, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+                <TextBlock Text="ElevationChange(m)" Margin="0 5 0 0"/>
+                <TextBox Text="{Binding Pipe.ElevationChange, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+                <TextBlock Text="AbsoluteRoughness(mm)" Margin="0 5 0 0"/>
+                <TextBox Style="{StaticResource ExtendedTextStytle}" Text="{Binding Pipe.AbsoluteRoughness, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource, FallbackValue=0.2}" />
+                <TextBlock Text="MarginFactor" Margin="0 5 0 0"/>
+                <TextBox  Style="{StaticResource ExtendedTextStytle}" Text="{Binding Pipe.MarginFactor, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource, FallbackValue=1.15}" />
+                <TextBlock Text="ElbowAndTee(pcs.)" Margin="0 5 0 0"/>
+                <TextBox Text="{Binding Pipe.ElbowAndTee, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+                <TextBlock Text="GlobeValve(pcs.)" Margin="0 5 0 0"/>
+                <TextBox Text="{Binding Pipe.GlobeValve, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+                <TextBlock Text="CheckValve(pcs.)" Margin="0 5 0 0"/>
+                <TextBox Text="{Binding Pipe.CheckValve, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}" />
+
+                <Grid Margin="0 12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command ="{Binding CalculateCommand}" Margin="0 0 7 0" Grid.Column="0" Content="Calcute" IsDefault="True" />
+                    <Button IsEnabled="False"  Command ="{Binding UtilityCommand}" Margin="7 0 0 0" Grid.Column="1" Content="Utility"/>
+                </Grid>
+            </StackPanel>
+            <TextBlock Grid.Column="1" Grid.Row="0" Margin="5 0 0 0" Text="Report" FontWeight="Bold" Foreground="Red" />
+           
+            <ListView Grid.Column="1" Grid.Row="1" Margin="5 5 0 0" Foreground="Blue" 
+                      ItemsSource="{Binding MyReport}"  
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                <ListView.View >
+                    <GridView >
+                        <GridViewColumn Header="Item" Width="130" DisplayMemberBinding="{Binding Item}"/>
+                        <GridViewColumn Header="Value" Width="65" DisplayMemberBinding="{Binding Value}" />
+                        <GridViewColumn Header="Unit" Width="55" DisplayMemberBinding="{Binding Unit}"/>
+                    </GridView>
+                </ListView.View>
+                
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <!--ontop-->
+                        <MenuItem x:Name="mnuOnTop"  Header="OnTop" IsCheckable="True"/>
+                        <MenuItem Header="Export" Command="{Binding ExportReportCommand}" />
+                        <Separator/>
+                        <MenuItem Header="Help" Command="{Binding HelpCommand}" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
+                
+            </ListView>
+        </Grid>
+    </Border>
+</Window>

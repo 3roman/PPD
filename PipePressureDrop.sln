@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipePressureDrop", "PipePressureDrop.csproj", "{598B3088-455F-4676-A1DC-11081AF2C627}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{598B3088-455F-4676-A1DC-11081AF2C627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{598B3088-455F-4676-A1DC-11081AF2C627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{598B3088-455F-4676-A1DC-11081AF2C627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{598B3088-455F-4676-A1DC-11081AF2C627}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2FCCB47F-2E28-466F-81D4-EDB4DE08658A}
+	EndGlobalSection
+EndGlobal
